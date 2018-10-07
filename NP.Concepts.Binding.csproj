@@ -7,8 +7,8 @@
     <ProjectGuid>{C5FC06E6-A7FB-4C56-AFD5-A2734460F04B}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>NP.Concepts</RootNamespace>
-    <AssemblyName>NP.Concepts</AssemblyName>
+    <RootNamespace>NP.Concepts.Binding</RootNamespace>
+    <AssemblyName>NP.Concepts.Binding</AssemblyName>
     <TargetFrameworkVersion>v4.7</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -40,6 +40,27 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AProp.cs" />
+    <Compile Include="Extensions\CompiledExpressionUtils.cs" />
+    <Compile Include="Extensions\EventManager.cs" />
+    <Compile Include="GettersAndSetters\APropsGetterAndSetter.cs" />
+    <Compile Include="GettersAndSetters\CompositePathPropertyGetterAndSetter.cs" />
+    <Compile Include="GettersAndSetters\GenericSimplePropGetterAndSetter.cs" />
+    <Compile Include="GettersAndSetters\IAPropValueGetter.cs" />
+    <Compile Include="GettersAndSetters\IPropGetterAndSetter.cs" />
+    <Compile Include="GettersAndSetters\PlainPropGetterAndSetter.cs" />
+    <Compile Include="GettersAndSetters\Proptype.cs" />
+    <Compile Include="GettersAndSetters\SimplePropGetter.cs" />
+    <Compile Include="PathLinks\APropBindingPathLink.cs" />
+    <Compile Include="PathLinks\BindingPathLinkBase.cs" />
+    <Compile Include="PathLinks\DynamicPropBindingPathLink.cs" />
+    <Compile Include="PathLinks\IBindingPathLink.cs" />
+    <Compile Include="PathLinks\NameBasedBindingPathLink.cs" />
+    <Compile Include="PathLinks\PathLinkHelpers.cs" />
+    <Compile Include="PathLinks\PathLinkInfo.cs" />
+    <Compile Include="PathLinks\PlainPropBindingPathLink.cs" />
+    <Compile Include="PathLinks\PropertyKind.cs" />
+    <Compile Include="PathLinks\PropKindContainer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
