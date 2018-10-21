@@ -82,7 +82,7 @@ namespace NP.Concepts.Binding.GettersAndSetters
 
         public override PropertyType GetPropValue()
         {
-            if (_propertyGetter == null)
+            if ( (_propertyGetter == null) || (TheObj == null) )
             {
                 return DefaultValue;
             }

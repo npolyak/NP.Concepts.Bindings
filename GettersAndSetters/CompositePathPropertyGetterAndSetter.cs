@@ -17,7 +17,8 @@ using System.Linq;
 
 namespace NP.Concepts.Binding.GettersAndSetters
 {
-    public class CompositePathGetter<PropertyType> : IObjWithPropGetter<PropertyType>
+    public class CompositePathGetter<PropertyType> :
+        IObjWithPropGetter<PropertyType>
     {
         PropertyType _defaultValue;
 
@@ -37,20 +38,14 @@ namespace NP.Concepts.Binding.GettersAndSetters
         {
             get
             {
-                return _propGetters[_propGetters.Count - 1];
+                return PropGetters[PropGetters.Count - 1];
             }
         }
 
         IEnumerable<IBindingPathLink<object>> _pathLinks;
 
-        List<IObjWithPropGetter<object>> _propGetters = new List<IObjWithPropGetter<object>>();
-        public List<IObjWithPropGetter<object>> PropGetters
-        {
-            get
-            {
-                return _propGetters;
-            }
-        }
+        public List<IObjWithPropGetter<object>> PropGetters { get; } =
+            new List<IObjWithPropGetter<object>>();
 
         public CompositePathGetter
         (
@@ -64,7 +59,7 @@ namespace NP.Concepts.Binding.GettersAndSetters
 
             if (pathLinks.IsNullOrEmpty())
             {
-                _propGetters.Add(new SimplePropGetter<object>());
+                PropGetters.Add(new SimplePropGetter<object>());
                 return;
             }
 
@@ -73,7 +68,7 @@ namespace NP.Concepts.Binding.GettersAndSetters
             {
                 IObjWithPropGetter<object> propGetter = pathLink.CreateGetter();
 
-                _propGetters.Add(propGetter);
+                PropGetters.Add(propGetter);
 
                 if (previousPropGetter != null)
                 {
@@ -147,7 +142,7 @@ namespace NP.Concepts.Binding.GettersAndSetters
                 }
 
                 _obj = value;
-                this._propGetters[0].TheObj = _obj;
+                this.PropGetters[0].TheObj = _obj;
 
                 if (HasObj)
                 {
@@ -165,40 +160,26 @@ namespace NP.Concepts.Binding.GettersAndSetters
         }
     }
 
-    public class CompositePathSetter<PropertyType> : IObjWithPropSetter<PropertyType>
+    public class CompositePathSetter<PropertyType> : 
+        IObjWithPropSetter<PropertyType>
     {
-        IObjWithPropSetter<object> _theSetter = null;
-        public IObjWithPropSetter<object> TheSetter
-        {
-            get
-            {
-                return _theSetter;
-            }
-        }
-
-        List<IObjWithPropGetter<object>> _propGetters;
-        public List<IObjWithPropGetter<object>> PropGetters
-        {
-            get
-            {
-                return _propGetters;
-            }
-        }
+        public IObjWithPropSetter<object> TheSetter { get; } = null;
+        public List<IObjWithPropGetter<object>> PropGetters { get; }
 
         public CompositePathSetter(IEnumerable<IBindingPathLink<object>> pathLinks)
         {
             IBindingPathLink<object> theSetterPathLink = pathLinks.Last();
 
-            _theSetter = theSetterPathLink.CreateSetter();
+            TheSetter = theSetterPathLink.CreateSetter();
 
-            _propGetters =
+            PropGetters =
                 pathLinks
                     .TakeWhile((pathLink) => (!Object.ReferenceEquals(pathLink, theSetterPathLink)))
                     .Select((pathLink) => pathLink.CreateGetter())
                     .ToList();
 
             IObjWithPropGetter<object> previousPropGetter = null;
-            foreach (var propGetter in _propGetters)
+            foreach (var propGetter in PropGetters)
             {
                 IObjWithPropGetter<object> thePreviousPropGetter = previousPropGetter;
                 if (previousPropGetter != null)
@@ -218,37 +199,37 @@ namespace NP.Concepts.Binding.GettersAndSetters
                 // set the last property getter to the set the setter
                 previousPropGetter.PropertyChangedEvent += () =>
                 {
-                    _theSetter.TheObj = thePreviousPropGetter.GetPropValue();
+                    TheSetter.TheObj = thePreviousPropGetter.GetPropValue();
                 };
             }
         }
 
         public void Set(PropertyType propertyValue)
         {
-            _theSetter.Set(propertyValue);
+            TheSetter.Set(propertyValue);
         }
 
         public object TheObj
         {
             get
             {
-                if (_propGetters.Count > 0)
+                if (PropGetters.Count > 0)
                 {
-                    return _propGetters[0].TheObj;
+                    return PropGetters[0].TheObj;
                 }
 
-                return _theSetter.TheObj;
+                return TheSetter.TheObj;
             }
 
             set 
             {
-                if (_propGetters.Count > 0)
+                if (PropGetters.Count > 0)
                 {
-                    _propGetters[0].TheObj = value;
+                    PropGetters[0].TheObj = value;
                 }
                 else
                 {
-                    _theSetter.TheObj = value;
+                    TheSetter.TheObj = value;
                 }
             }
         }

@@ -54,4 +54,24 @@ namespace NP.Concepts.Binding.GettersAndSetters
     {
 
     }
+
+    public static class SetterGetterUtils
+    {
+        public static void SetterFromGetter<SetterPropType, GetterPropType>
+        (
+            this IPropSetter<SetterPropType> setter,
+            IPropGetter<GetterPropType> getter,
+            Func<GetterPropType, SetterPropType> converter)
+        {
+            setter.Set(converter( getter.GetPropValue()));
+        }
+
+        public static void SetterFromGetter<PropType>
+        (
+            this IPropSetter<PropType> setter, 
+            IPropGetter<PropType> getter)
+        {
+            setter.SetterFromGetter(getter, (val) => val);
+        }
+    }
 }
